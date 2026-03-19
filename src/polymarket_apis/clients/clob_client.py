@@ -617,13 +617,46 @@ class PolymarketClobClient(PolymarketReadOnlyClobClient):
                 content=json.dumps(body).encode("utf-8"),
             )
             response.raise_for_status()
-            return OrderPostResponse(**response.json())
+            parsed = OrderPostResponse(**response.json())
+            if parsed.status_code is None:
+                parsed.status_code = response.status_code
+            if parsed.request_id is None:
+                parsed.request_id = response.headers.get("x-request-id")
+            if not parsed.detail and parsed.error_msg:
+                parsed.detail = parsed.error_msg
+            return parsed
         except httpx.HTTPStatusError as exc:
             msg = f"Client Error '{exc.response.status_code} {exc.response.reason_phrase}' while posting order"
-            logger.warning(msg)
-            error_json = exc.response.json()
-            print("Details:", error_json["error"])
-            return None
+            detail = None
+            request_id = exc.response.headers.get("x-request-id")
+            try:
+                error_json = exc.response.json()
+            except ValueError:
+                error_json = None
+            if isinstance(error_json, dict):
+                raw_detail = (
+                    error_json.get("detail")
+                    or error_json.get("error")
+                    or error_json.get("message")
+                )
+                if raw_detail is not None:
+                    detail = str(raw_detail)
+                body_request_id = error_json.get("request_id") or error_json.get("requestId")
+                if body_request_id:
+                    request_id = str(body_request_id)
+
+            logger.warning("%s | detail=%s | request_id=%s", msg, detail or "", request_id or "")
+            return OrderPostResponse(
+                errorMsg=msg,
+                orderID="",
+                takingAmount="",
+                makingAmount="",
+                status="",
+                success=False,
+                statusCode=exc.response.status_code,
+                detail=detail,
+                requestId=request_id,
+            )
 
     def create_and_post_order(
         self,

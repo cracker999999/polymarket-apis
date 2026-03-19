@@ -510,12 +510,17 @@ class ContractConfig(BaseModel):
 
 
 class OrderPostResponse(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     error_msg: str = Field(alias="errorMsg")
     order_id: Union[Keccak256, Literal[""]] = Field(alias="orderID")
     taking_amount: str = Field(alias="takingAmount")
     making_amount: str = Field(alias="makingAmount")
     status: Literal["live", "matched", "delayed", "unmatched", ""]
     success: bool
+    status_code: Optional[int] = Field(default=None, alias="statusCode")
+    detail: Optional[str] = None
+    request_id: Optional[str] = Field(default=None, alias="requestId")
 
 
 class OrderCancelResponse(BaseModel):
