@@ -211,6 +211,8 @@ class GammaMarket(BaseModel):
     )
     twitter_card_location: Optional[str] = Field(None, alias="twitterCardLocation")
 
+    fee_schedule: dict[str, object] | None = Field(None, alias="feeSchedule")
+    maker_rebates_fee_share_bps: int | None = Field(None, alias="makerRebatesFeeShareBps")
     @field_validator("condition_id", mode="wrap")
     @classmethod
     def validate_condition_id(

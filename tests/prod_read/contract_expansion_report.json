@@ -1,0 +1,20 @@
+[
+  {
+    "endpoint": "gamma /markets",
+    "model": "polymarket_apis.types.gamma_types.GammaMarket",
+    "path": "$[].feeSchedule",
+    "alias": "feeSchedule",
+    "field_name": "fee_schedule",
+    "type": "dict[str, object] | None",
+    "file": "/home/runner/work/polymarket-apis/polymarket-apis/src/polymarket_apis/types/gamma_types.py"
+  },
+  {
+    "endpoint": "gamma /markets",
+    "model": "polymarket_apis.types.gamma_types.GammaMarket",
+    "path": "$[].makerRebatesFeeShareBps",
+    "alias": "makerRebatesFeeShareBps",
+    "field_name": "maker_rebates_fee_share_bps",
+    "type": "int | None",
+    "file": "/home/runner/work/polymarket-apis/polymarket-apis/src/polymarket_apis/types/gamma_types.py"
+  }
+]
