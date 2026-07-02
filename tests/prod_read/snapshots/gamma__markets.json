@@ -62,6 +62,7 @@
     "$[].events[].eventMetadata.context_updated_at:str",
     "$[].events[].eventMetadata.format:str",
     "$[].events[].eventMetadata.gridSeriesId:null",
+    "$[].events[].eventMetadata.gridSeriesId:str",
     "$[].events[].eventMetadata.league:str",
     "$[].events[].eventMetadata.leagueTier:str",
     "$[].events[].eventMetadata.opticOddsFixtureId:str",
